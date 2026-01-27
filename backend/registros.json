@@ -1,0 +1,287 @@
+[
+  {
+    "fecha": "2026-01-25T22:29:14.924Z",
+    "materiales": [
+      {
+        "nombre": "Casco de seguridad",
+        "precio": 50,
+        "cantidad": 1
+      }
+    ],
+    "total": 50
+  },
+  {
+    "fecha": "2026-01-25T22:29:21.851Z",
+    "materiales": [
+      {
+        "nombre": "Casco de seguridad",
+        "precio": 50,
+        "cantidad": 1
+      },
+      {
+        "nombre": "Guantes de cuero",
+        "precio": 20,
+        "cantidad": 2
+      }
+    ],
+    "total": 90
+  },
+  {
+    "fecha": "2026-01-25T22:38:20.127Z",
+    "materiales": [
+      {
+        "nombre": "Casco de seguridad",
+        "precio": 50,
+        "cantidad": 2
+      },
+      {
+        "nombre": "Guantes de cuero",
+        "precio": 20,
+        "cantidad": 2
+      }
+    ],
+    "total": 140
+  },
+  {
+    "fecha": "2026-01-25T22:53:57.372Z",
+    "materiales": [
+      {
+        "nombre": "Botas mineras",
+        "precio": 120,
+        "cantidad": 1
+      }
+    ],
+    "total": 120
+  },
+  {
+    "fecha": "2026-01-25T22:58:59.847Z",
+    "materiales": [
+      {
+        "nombre": "Guantes de cuero",
+        "precio": 20,
+        "cantidad": 1
+      },
+      {
+        "nombre": "Botas mineras",
+        "precio": 120,
+        "cantidad": 1
+      }
+    ],
+    "total": 140
+  },
+  {
+    "fecha": "2026-01-25T23:07:28.445Z",
+    "materiales": [
+      {
+        "nombre": "Botas mineras",
+        "precio": 120,
+        "cantidad": 1
+      }
+    ],
+    "total": 120
+  },
+  {
+    "fecha": "2026-01-26T12:42:36.306Z",
+    "materiales": [
+      {
+        "nombre": "Botas mineras",
+        "precio": 120,
+        "cantidad": 1
+      }
+    ],
+    "total": 120
+  },
+  {
+    "fecha": "2026-01-26T12:42:37.480Z",
+    "materiales": [
+      {
+        "nombre": "Botas mineras",
+        "precio": 120,
+        "cantidad": 1
+      }
+    ],
+    "total": 120
+  },
+  {
+    "fecha": "2026-01-26T12:42:40.368Z",
+    "materiales": [
+      {
+        "nombre": "Botas mineras",
+        "precio": 120,
+        "cantidad": 1
+      }
+    ],
+    "total": 120
+  },
+  {
+    "fecha": "2026-01-26T12:50:26.080Z",
+    "materiales": [
+      {
+        "nombre": "Casco de seguridad",
+        "precio": 50,
+        "cantidad": 1
+      },
+      {
+        "nombre": "Botas mineras",
+        "precio": 120,
+        "cantidad": 1
+      }
+    ],
+    "total": 170
+  },
+  {
+    "fecha": "2026-01-26T13:14:31.590Z",
+    "materiales": [
+      {
+        "nombre": "Casco de seguridad",
+        "cantidad": 1,
+        "precio": 50
+      },
+      {
+        "nombre": "Guantes de cuero",
+        "cantidad": 2,
+        "precio": 20
+      },
+      {
+        "nombre": "Botas mineras",
+        "cantidad": 1,
+        "precio": 120
+      }
+    ],
+    "total": 210
+  },
+  {
+    "fecha": "2026-01-26T13:19:33.155Z",
+    "materiales": [
+      {
+        "nombre": "Casco de seguridad",
+        "cantidad": 1,
+        "precio": 50
+      },
+      {
+        "nombre": "Botas mineras",
+        "cantidad": 1,
+        "precio": 120
+      },
+      {
+        "nombre": "Lámpara frontal",
+        "cantidad": 2,
+        "precio": 80
+      }
+    ],
+    "total": 330
+  },
+  {
+    "fecha": "2026-01-26T13:29:51.357Z",
+    "materiales": [
+      {
+        "nombre": "Casco de seguridad",
+        "cantidad": 1,
+        "precio": 50
+      },
+      {
+        "nombre": "Botas mineras",
+        "cantidad": 1,
+        "precio": 120
+      },
+      {
+        "nombre": "Lámpara frontal",
+        "cantidad": 2,
+        "precio": 80
+      }
+    ],
+    "total": 330
+  },
+  {
+    "fecha": "2026-01-26T13:32:56.438Z",
+    "trabajadores": [
+      {
+        "nombre": "joansodfnaobsdfou",
+        "firma": "data:image/png;base64,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"
+      }
+    ],
+    "materiales": [
+      {
+        "nombre": "Casco de seguridad",
+        "cantidad": 1,
+        "precio": 50
+      },
+      {
+        "nombre": "Guantes de cuero",
+        "cantidad": 2,
+        "precio": 20
+      },
+      {
+        "nombre": "Botas mineras",
+        "cantidad": 2,
+        "precio": 120
+      }
+    ],
+    "total": 330
+  },
+  {
+    "fecha": "2026-01-26T13:39:22.233Z",
+    "trabajadores": [
+      {
+        "nombre": "juan perez",
+        "firma": "data:image/png;base64,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"
+      }
+    ],
+    "materiales": [
+      {
+        "nombre": "Casco de seguridad",
+        "cantidad": 2,
+        "precio": 50
+      },
+      {
+        "nombre": "Guantes de cuero",
+        "cantidad": 2,
+        "precio": 20
+      },
+      {
+        "nombre": "Botas mineras",
+        "cantidad": 2,
+        "precio": 120
+      }
+    ],
+    "total": 380
+  },
+  {
+    "fecha": "2026-01-26T15:52:20.151Z",
+    "trabajadores": [
+      {
+        "nombre": "pedro",
+        "firma": "data:image/png;base64,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"
+      }
+    ],
+    "materiales": [
+      {
+        "nombre": "Casco de seguridad",
+        "cantidad": 1,
+        "precio": 50
+      },
+      {
+        "nombre": "Guantes de cuero",
+        "cantidad": 1,
+        "precio": 20
+      },
+      {
+        "nombre": "Botas mineras",
+        "cantidad": 1,
+        "precio": 120
+      },
+      {
+        "nombre": "Lámpara frontal",
+        "cantidad": 1,
+        "precio": 80
+      }
+    ],
+    "total": 270
+  },
+  {
+    "fecha": "2026-01-26T16:13:54.393Z",
+    "trabajadores": [],
+    "materiales": [],
+    "total": 0
+  }
+]

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>ICEMIN</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+<div id="login" class="login-bg">
+  <div class="login-overlay"></div>
+
+  <div class="login-container">
+
+    <img src="images/logo-icemin.png" class="login-logo" alt="ICEMIN">
+
+    <h1 class="login-title">INGRESO AL SISTEMA ICEMIN</h1>
+
+    <form id="formLogin" class="login-form">
+
+      <input type="text" id="usuario" placeholder="Usuario" required>
+      <input type="password" id="password" placeholder="Contraseña" required>
+
+      <button type="submit">Ingresar</button>
+    </form>
+  </div>
+</div>
+
+<div id="sistema" class="registro-bg" style="display:none">
+
+  <header class="header">
+  <h1>Sistema ICEMIN</h1>
+
+  <div class="imagen-sistema">
+    <img src="images/mina-principal.png" alt="Mina ICEMIN">
+  </div>
+
+  <div class="info-usuario">
+    <span>Usuario: <strong id="usuarioActivo"></strong></span>
+    <span>Rol: <strong id="rolActivo"></strong></span>
+    <button id="btnLogout">Cerrar sesión</button>
+  </div>
+</header>
+
+
+  <hr>
+
+  <section class="seccion">
+    <h2>Materiales</h2>
+    <div id="lista-materiales"></div>
+    <h3>Total: S/ <span id="total">0</span></h3>
+  </section>
+
+  <hr>
+
+  <section class="seccion">
+    <h2>Trabajadores</h2>
+    <div id="trabajadores-container"></div>
+    <button id="btnAgregarTrabajador">Agregar trabajador</button>
+  </section>
+
+  <br>
+
+  <button id="btnGuardar">Guardar registro</button>
+
+  <button id="btnExcel" onclick="exportarExcel()" style="display:none">
+    Exportar a Excel
+  </button>
+
+  <hr>
+
+  <section id="panelAdmin" class="seccion" style="display:none">
+    <h2>Administración de usuarios</h2>
+
+    <input id="nuevoUsuario" placeholder="Usuario">
+    <input id="nuevoPass" placeholder="Contraseña">
+
+    <select id="nuevoRol">
+      <option value="operador">Operador</option>
+      <option value="admin">Administrador</option>
+    </select>
+
+    <button id="btnCrearUsuario">Crear usuario</button>
+
+    <h3>Usuarios registrados</h3>
+    <ul id="listaUsuarios"></ul>
+  </section>
+
+</div>
+
+<datalist id="listaCargos">
+  <option value="Supervisor">
+  <option value="Operador Eléctrico">
+  <option value="Operador de Maquinaria">
+  <option value="Topógrafo">
+  <option value="Mecánico">
+  <option value="Ayudante">
+  <option value="Ingeniero">
+  <option value="Técnico">
+</datalist>
+
+<script src="script.js"></script>
+
+</body>
+</html>
