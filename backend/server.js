@@ -10,8 +10,10 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 
+app.use(express.static(path.join(__dirname, 'frontend')));
+
 app.get('/', (req, res) => {
-  res.send('ICEMIN API ACTIVA 🚀');
+  res.sendFile(path.join(__dirname, 'frontend', 'index.html'));
 });
 
 const sesiones = {};
@@ -71,10 +73,6 @@ function soloAdmin(req, res, next) {
 app.post('/api/login', (req, res) => {
   const { usuario, password } = req.body;
 
-  if (!fs.existsSync(usuariosPath)) {
-    return res.status(500).json({ mensaje: 'Archivo de usuarios no existe' });
-  }
-
   const usuarios = JSON.parse(fs.readFileSync(usuariosPath, 'utf8'));
   const encontrado = usuarios.find(
     u => u.usuario === usuario && u.password === password
@@ -124,7 +122,7 @@ app.post('/api/guardar', verificarSesion, (req, res) => {
   };
 
   const registros = fs.existsSync(filePath)
-    ? JSON.parse(fs.readFileSync(filePath, 'utf8') || '[]')
+    ? JSON.parse(fs.readFileSync(filePath, 'utf8'))
     : [];
 
   registros.push(registro);
@@ -138,7 +136,7 @@ app.get('/api/exportar-excel', verificarSesion, soloAdmin, async (req, res) => {
   const filePath = path.join(registrosDir, `${fechaArchivo}.json`);
 
   if (!fs.existsSync(filePath)) {
-    return res.status(404).json({ mensaje: `No hay registros para ${fechaArchivo}` });
+    return res.status(404).json({ mensaje: 'No hay registros' });
   }
 
   const registros = JSON.parse(fs.readFileSync(filePath, 'utf8'));
@@ -151,12 +149,9 @@ app.get('/api/exportar-excel', verificarSesion, soloAdmin, async (req, res) => {
     { header: 'DNI', width: 15 },
     { header: 'Cargo', width: 25 },
     { header: 'Materiales', width: 40 },
-    { header: 'Total (S/)', width: 15 },
-    { header: 'Fecha', width: 22 },
-    { header: 'Firma', width: 30 }
+    { header: 'Total', width: 15 },
+    { header: 'Fecha', width: 22 }
   ];
-
-  let fila = 2;
 
   registros.forEach(reg => {
     reg.trabajadores.forEach(trab => {
@@ -164,30 +159,11 @@ app.get('/api/exportar-excel', verificarSesion, soloAdmin, async (req, res) => {
         reg.usuario,
         trab.nombre,
         trab.dni,
-        trab.cargo || '',
-        reg.materiales.map(m => `${m.nombre} (${m.cantidad})`).join('\n'),
+        trab.cargo,
+        reg.materiales.map(m => `${m.nombre} (${m.cantidad})`).join(', '),
         reg.total,
-        reg.fecha,
-        ''
+        reg.fecha
       ]);
-
-      sheet.getCell(`E${fila}`).alignment = { wrapText: true };
-
-      if (trab.firma && trab.firma.startsWith('data:image')) {
-        const imageId = workbook.addImage({
-          base64: trab.firma,
-          extension: 'png'
-        });
-
-        sheet.addImage(imageId, {
-          tl: { col: 7, row: fila - 1 },
-          ext: { width: 160, height: 70 }
-        });
-
-        sheet.getRow(fila).height = 60;
-      }
-
-      fila++;
     });
   });
 
@@ -201,5 +177,5 @@ app.get('/api/exportar-excel', verificarSesion, soloAdmin, async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`🚀 Servidor ICEMIN activo en puerto ${PORT}`);
+  console.log('ICEMIN API ACTIVA 🚀');
 });
