@@ -11,7 +11,7 @@ app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend', 'index.html'));
+  res.send('ICEMIN API ACTIVA 🚀');
 });
 
 const sesiones = {};
