@@ -9,9 +9,11 @@ const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
-
-// 👉 FRONTEND (si server.js está en /backend)
 app.use(express.static(path.join(__dirname, '../frontend')));
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend', 'index.html'));
+});
 
 const sesiones = {};
 const usuariosPath = path.join(__dirname, 'usuarios.json');
@@ -137,9 +139,7 @@ app.get('/api/exportar-excel', verificarSesion, soloAdmin, async (req, res) => {
   const filePath = path.join(registrosDir, `${fechaArchivo}.json`);
 
   if (!fs.existsSync(filePath)) {
-    return res
-      .status(404)
-      .json({ mensaje: `No hay registros para ${fechaArchivo}` });
+    return res.status(404).json({ mensaje: `No hay registros para ${fechaArchivo}` });
   }
 
   const registros = JSON.parse(fs.readFileSync(filePath, 'utf8'));
