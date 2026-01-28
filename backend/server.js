@@ -9,7 +9,9 @@ const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
-app.use(express.static(path.join(__dirname, 'frontend')));
+
+// 👉 FRONTEND (si server.js está en /backend)
+app.use(express.static(path.join(__dirname, '../frontend')));
 
 const sesiones = {};
 const usuariosPath = path.join(__dirname, 'usuarios.json');
@@ -37,8 +39,9 @@ function obtenerFechaHoraLima() {
 }
 
 function obtenerFechaArchivo() {
-  return new Date()
-    .toLocaleDateString('en-CA', { timeZone: 'America/Lima' });
+  return new Date().toLocaleDateString('en-CA', {
+    timeZone: 'America/Lima'
+  });
 }
 
 function verificarSesion(req, res, next) {
@@ -163,9 +166,7 @@ app.get('/api/exportar-excel', verificarSesion, soloAdmin, async (req, res) => {
         trab.nombre,
         trab.dni,
         trab.cargo || '',
-        reg.materiales
-          .map(m => `${m.nombre} (${m.cantidad})`)
-          .join('\n'),
+        reg.materiales.map(m => `${m.nombre} (${m.cantidad})`).join('\n'),
         reg.total,
         reg.fecha,
         ''
@@ -201,5 +202,5 @@ app.get('/api/exportar-excel', verificarSesion, soloAdmin, async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`🚀 Servidor ICEMIN activo en http://localhost:${PORT}`);
+  console.log(`🚀 Servidor ICEMIN activo en puerto ${PORT}`);
 });
