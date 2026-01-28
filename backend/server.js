@@ -37,7 +37,8 @@ function obtenerFechaHoraLima() {
 }
 
 function obtenerFechaArchivo() {
-  return new Date().toISOString().split('T')[0];
+  return new Date()
+    .toLocaleDateString('en-CA', { timeZone: 'America/Lima' });
 }
 
 function verificarSesion(req, res, next) {
@@ -93,6 +94,7 @@ app.post('/api/login', (req, res) => {
     rol: encontrado.rol
   });
 });
+
 app.get('/api/materiales', (req, res) => {
   res.json([
     { id: 1, nombre: 'Casco de seguridad', precio: 50 },
@@ -128,11 +130,13 @@ app.post('/api/guardar', verificarSesion, (req, res) => {
 });
 
 app.get('/api/exportar-excel', verificarSesion, soloAdmin, async (req, res) => {
-  const fechaArchivo = obtenerFechaArchivo();
+  const fechaArchivo = req.query.fecha || obtenerFechaArchivo();
   const filePath = path.join(registrosDir, `${fechaArchivo}.json`);
 
   if (!fs.existsSync(filePath)) {
-    return res.status(404).json({ mensaje: 'No hay registros hoy' });
+    return res
+      .status(404)
+      .json({ mensaje: `No hay registros para ${fechaArchivo}` });
   }
 
   const registros = JSON.parse(fs.readFileSync(filePath, 'utf8'));
