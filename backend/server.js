@@ -9,6 +9,7 @@ const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
+
 app.use(express.static(path.join(__dirname, 'frontend')));
 
 app.get('/', (req, res) => {
@@ -20,30 +21,21 @@ const usuariosPath = path.join(__dirname, 'usuarios.json');
 const registrosDir = path.join(__dirname, 'registros');
 
 function obtenerFechaHoraLima() {
-  const ahora = new Date();
-
-  const fecha = ahora.toLocaleDateString('es-PE', {
-    timeZone: 'America/Lima',
-    day: '2-digit',
-    month: '2-digit',
-    year: '2-digit'
+  return new Date().toLocaleString('es-PE', {
+    timeZone: 'America/Lima'
   });
-
-  const hora = ahora.toLocaleTimeString('es-PE', {
-    timeZone: 'America/Lima',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-    hour12: true
-  });
-
-  return `${fecha} ${hora}`;
 }
 
 function obtenerFechaArchivo() {
   return new Date().toLocaleDateString('en-CA', {
     timeZone: 'America/Lima'
   });
+}
+
+function generarCodigoOrden(registros, fechaArchivo) {
+  const fecha = fechaArchivo.replace(/-/g, '');
+  const numero = registros.length + 1;
+  return `ORD-${fecha}-${String(numero).padStart(3, '0')}`;
 }
 
 function verificarSesion(req, res, next) {
@@ -111,7 +103,14 @@ app.post('/api/guardar', verificarSesion, (req, res) => {
   const fechaArchivo = obtenerFechaArchivo();
   const filePath = path.join(registrosDir, `${fechaArchivo}.json`);
 
+  const registros = fs.existsSync(filePath)
+    ? JSON.parse(fs.readFileSync(filePath, 'utf8'))
+    : [];
+
+  const codigoOrden = generarCodigoOrden(registros, fechaArchivo);
+
   const registro = {
+    codigoOrden,
     fecha: obtenerFechaHoraLima(),
     usuario: req.usuario.usuario,
     rol: req.usuario.rol,
@@ -120,14 +119,13 @@ app.post('/api/guardar', verificarSesion, (req, res) => {
     total: req.body.total || 0
   };
 
-  const registros = fs.existsSync(filePath)
-    ? JSON.parse(fs.readFileSync(filePath, 'utf8'))
-    : [];
-
   registros.push(registro);
   fs.writeFileSync(filePath, JSON.stringify(registros, null, 2));
 
-  res.json({ mensaje: 'Registro guardado correctamente ✅' });
+  res.json({
+    mensaje: 'Registro guardado correctamente ✅',
+    codigoOrden
+  });
 });
 
 app.get('/api/exportar-excel', verificarSesion, soloAdmin, async (req, res) => {
@@ -143,48 +141,28 @@ app.get('/api/exportar-excel', verificarSesion, soloAdmin, async (req, res) => {
   const sheet = workbook.addWorksheet('ICEMIN');
 
   sheet.columns = [
+    { header: 'Código Orden', width: 22 },
     { header: 'Usuario', width: 18 },
     { header: 'Trabajador', width: 25 },
     { header: 'DNI', width: 15 },
-    { header: 'Cargo', width: 22 },
-    { header: 'Materiales', width: 40 },
-    { header: 'Total (S/)', width: 15 },
-    { header: 'Fecha', width: 22 },
-    { header: 'Firma', width: 30 }
+    { header: 'Cargo', width: 25 },
+    { header: 'Materiales', width: 45 },
+    { header: 'Total', width: 15 },
+    { header: 'Fecha', width: 22 }
   ];
-
-  let fila = 2;
 
   registros.forEach(reg => {
     reg.trabajadores.forEach(trab => {
       sheet.addRow([
+        reg.codigoOrden,
         reg.usuario,
         trab.nombre,
         trab.dni,
-        trab.cargo || '',
-        reg.materiales.map(m => `• ${m.nombre} (${m.cantidad})`).join('\n'),
+        trab.cargo,
+        reg.materiales.map(m => `${m.nombre} (${m.cantidad})`).join('\n'),
         reg.total,
-        reg.fecha,
-        ''
+        reg.fecha
       ]);
-
-      sheet.getCell(`E${fila}`).alignment = { wrapText: true };
-
-      if (trab.firma && trab.firma.startsWith('data:image')) {
-        const imageId = workbook.addImage({
-          base64: trab.firma,
-          extension: 'png'
-        });
-
-        sheet.addImage(imageId, {
-          tl: { col: 7, row: fila - 1 },
-          ext: { width: 150, height: 70 }
-        });
-
-        sheet.getRow(fila).height = 60;
-      }
-
-      fila++;
     });
   });
 
