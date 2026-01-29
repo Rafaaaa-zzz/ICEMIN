@@ -9,7 +9,6 @@ const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
-
 app.use(express.static(path.join(__dirname, 'frontend')));
 
 app.get('/', (req, res) => {
@@ -147,11 +146,14 @@ app.get('/api/exportar-excel', verificarSesion, soloAdmin, async (req, res) => {
     { header: 'Usuario', width: 18 },
     { header: 'Trabajador', width: 25 },
     { header: 'DNI', width: 15 },
-    { header: 'Cargo', width: 25 },
+    { header: 'Cargo', width: 22 },
     { header: 'Materiales', width: 40 },
-    { header: 'Total', width: 15 },
-    { header: 'Fecha', width: 22 }
+    { header: 'Total (S/)', width: 15 },
+    { header: 'Fecha', width: 22 },
+    { header: 'Firma', width: 30 }
   ];
+
+  let fila = 2;
 
   registros.forEach(reg => {
     reg.trabajadores.forEach(trab => {
@@ -159,11 +161,30 @@ app.get('/api/exportar-excel', verificarSesion, soloAdmin, async (req, res) => {
         reg.usuario,
         trab.nombre,
         trab.dni,
-        trab.cargo,
-        reg.materiales.map(m => `${m.nombre} (${m.cantidad})`).join(', '),
+        trab.cargo || '',
+        reg.materiales.map(m => `• ${m.nombre} (${m.cantidad})`).join('\n'),
         reg.total,
-        reg.fecha
+        reg.fecha,
+        ''
       ]);
+
+      sheet.getCell(`E${fila}`).alignment = { wrapText: true };
+
+      if (trab.firma && trab.firma.startsWith('data:image')) {
+        const imageId = workbook.addImage({
+          base64: trab.firma,
+          extension: 'png'
+        });
+
+        sheet.addImage(imageId, {
+          tl: { col: 7, row: fila - 1 },
+          ext: { width: 150, height: 70 }
+        });
+
+        sheet.getRow(fila).height = 60;
+      }
+
+      fila++;
     });
   });
 
