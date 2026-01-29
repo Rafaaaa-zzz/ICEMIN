@@ -147,22 +147,51 @@ app.get('/api/exportar-excel', verificarSesion, soloAdmin, async (req, res) => {
     { header: 'DNI', width: 15 },
     { header: 'Cargo', width: 25 },
     { header: 'Materiales', width: 45 },
-    { header: 'Total', width: 15 },
-    { header: 'Fecha', width: 22 }
+    { header: 'Total (S/)', width: 15 },
+    { header: 'Fecha', width: 22 },
+    { header: 'Firma', width: 30 }
   ];
 
+  let fila = 2;
+
   registros.forEach(reg => {
+    const materialesTexto = reg.materiales
+      .map(m => `• ${m.nombre} (${m.cantidad})`)
+      .join('\n');
+
     reg.trabajadores.forEach(trab => {
       sheet.addRow([
         reg.codigoOrden,
         reg.usuario,
         trab.nombre,
         trab.dni,
-        trab.cargo,
-        reg.materiales.map(m => `${m.nombre} (${m.cantidad})`).join('\n'),
+        trab.cargo || '',
+        materialesTexto,
         reg.total,
-        reg.fecha
+        reg.fecha,
+        ''
       ]);
+
+      sheet.getCell(`F${fila}`).alignment = {
+        wrapText: true,
+        vertical: 'top'
+      };
+
+      if (trab.firma && trab.firma.startsWith('data:image')) {
+        const imageId = workbook.addImage({
+          base64: trab.firma,
+          extension: 'png'
+        });
+
+        sheet.addImage(imageId, {
+          tl: { col: 8, row: fila - 1 },
+          ext: { width: 160, height: 70 }
+        });
+
+        sheet.getRow(fila).height = 60;
+      }
+
+      fila++;
     });
   });
 
